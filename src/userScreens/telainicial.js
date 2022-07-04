@@ -1,17 +1,19 @@
 import axios from 'axios'
 import { useEffect,useState,useContext } from 'react'
+import styled from 'styled-components'
+import { useNavigate,Link } from 'react-router-dom'
 import { UserContext } from '../contexts/usercontext'
 import logout from '../assets/logout.svg'
 import plus from '../assets/plus.svg'
 import minus from '../assets/minus.svg'
-import styled from 'styled-components'
-import { useNavigate,Link } from 'react-router-dom'
+import Entrada from './entrada'
+
 
 export default function TelaInicial(){
     const navigate=useNavigate()
     const { user,setUser }=useContext(UserContext)
-    const {dados,setDados}=useState("")
-    let total;
+    const [dados,setDados]=useState()
+    const [total,setTotal]=useState()
     useEffect(()=>{
         const promise=axios.get("http://localhost:5000/registers",{
                 headers: {
@@ -20,24 +22,16 @@ export default function TelaInicial(){
         })
         promise
         .then(e=> {
-            total = e.map(elem=>{
-                const toFloater=elem.price.replace(",",".")
-                if(elem.type==='entry'){
-                    return parseFloat(toFloater)
-                }
-                if(elem.type==='withdraw'){
-                    return parseFloat(`-${toFloater}`)
-                }
-            })
-            .reduce((acc, elem) => acc + elem.price, 0);
-            setDados(e) 
+            console.log(e)
+            setDados(e.data.entradas)
+            setTotal(e.data.total)
         }) 
         .catch(error=> { 
-            alert(`${error.response.message}, tente novamente`) 
+            alert(error.response.data) 
             return(<h1>Erro</h1>)
         })
     },[])
-    if(dados==="") return <>loading</>
+    if(!dados) return <h1>Loading</h1>
     return(
         <>
             <Flex>
@@ -45,27 +39,23 @@ export default function TelaInicial(){
             <img onClick={()=>navigate('/')} src={logout} />
             </Flex>
             <Registros>
-            {(!dados ? (<>Não há registros de entrada ou saída</>) : 
+            {(dados.length===0 ? (<>Não há registros de entrada ou saída</>) : 
             <>
-            {dados.map(element=>
-                <Flex2>
-                    <span>{element.date}</span>
-                    <p>{element.description}</p>
-                    <Price type={element.type}>{element.price}</Price>
-                </Flex2>
+            {dados.map((elem,index)=>
+                <Entrada date={elem.date} description={elem.description} price={elem.price} type={elem.type} key={index}/>
             )}
             </>
             )}
-            <span>Saldo</span> {total}
+            <Flex2 total={total} >SALDO <span>{total}</span></Flex2>
             </Registros>
             <Footer>
-                <Link to="/newRegister:entry">
+                <Link to="/newRegister/entry">
                     <button>
-                        <img src={plus}/>
+                        <img src={plus}/>   
                         Nova Entrada
                     </button>
                 </Link>
-                <Link to="/newRegister:withdraw">
+                <Link to="/newRegister/withdraw">
                     <button>
                         <img src={minus}/>
                         Nova Saída
@@ -95,23 +85,11 @@ margin-top: 22px;
 border-radius: 5px;
 display: flex;
 flex-direction: column;
-align-items: center;
-justify-content: center;
+align-items: space-between;
+justify-content: space-between;
 text-align: center;
 font-size:20px;
 color:#868686;
-`
-const Flex2=styled.header`
-display: flex;
-justify-content: space-between;
-align-items: center;
-font-size: 16px;
-span{
-    color:#C6C6C6;
-}
-`
-const Price=styled.span`
-color:${props=>props.type==='withdraw' ? '#C70000' : '#03AC00'};
 `
 const Footer=styled.footer`
 display: flex;
@@ -138,5 +116,15 @@ img{
 }
 a{
     text-decoration: none;
+}
+`
+const Flex2=styled.div`
+display: flex;
+font-weight: 700;
+font-size: 17px;
+justify-content: space-between;
+span{
+    font-weight: 400;
+    color:${props=>props.total>=0 ? '#03AC00' : '#C70000'};
 }
 `

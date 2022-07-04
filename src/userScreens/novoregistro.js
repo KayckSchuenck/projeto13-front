@@ -3,10 +3,11 @@ import dayjs from "dayjs"
 import {useState,useContext} from 'react'
 import { UserContext } from "../contexts/usercontext"
 import styled from 'styled-components'
-import { useParams } from "react-router-dom"
+import { useParams,useNavigate } from "react-router-dom"
 
 export default function TelaNovoRegistro(){
     const { type }=useParams()
+    const navigate=useNavigate()
     let typeRegister=""
     if(type==='entry'){
         typeRegister='Entrada'
@@ -14,19 +15,20 @@ export default function TelaNovoRegistro(){
         typeRegister='Saída'
     }
     const {user,setUser}=useContext(UserContext)
-    const {price,setPrice}=useState("")
-    const {description,setDescription}=useState("")
+    const [price,setPrice]=useState("")
+    const [description,setDescription]=useState("")
     function clearInputs(){
         setPrice("")
         setDescription("")
     }
 
-    function handleSubmit(){
+    function handleSubmit(e){
         clearInputs()
+        e.preventDefault()
         const registerPost={
             price,
             description,
-            date:dayjs().format('DD/MM'),
+            date:dayjs().format('DD/MM/YY'),
             type
         }
         const config={
@@ -34,14 +36,19 @@ export default function TelaNovoRegistro(){
                 Authorization: `Bearer ${user.token}`
             }
         }
-        axios.post("http://localhost:5000/registers",registerPost,config)
+        const promise=axios.post("http://localhost:5000/registers",registerPost,config)
+        promise.then(()=>{
+            navigate('/telainicial')
+        }
+        )
+        .catch(()=>alert("Houve um erro, tente novamente"))
     }
 
     return (
         <>
         <h2>Nova {typeRegister}</h2>
         <Form onSubmit={handleSubmit}>
-            <input type='text' placeholder="Valor" value={price} onChange={e=>setPrice(e.target.value)} required />
+            <input type='number' placeholder="Valor" value={price} onChange={e=>setPrice(e.target.value)} required />
             <input type='text' placeholder="Descrição" value={description} onChange={e=>setDescription(e.target.value)} required/>
             <button type='submit'>
                 Salvar {typeRegister}

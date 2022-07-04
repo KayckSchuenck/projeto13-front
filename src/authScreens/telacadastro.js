@@ -24,6 +24,9 @@ export default function TelaCadastro() {
 
     function handleSubmit(e){
         e.preventDefault()
+        if(postForm.password!==postForm.confirmPassword){
+            alert("Senhas diferentes")
+        }
         const promise=axios.post("http://localhost:5000/sign-up/",postForm)
         setPostForm(clearInputs)
         promise.then(()=>{

@@ -13,7 +13,7 @@ import TelaNovoRegistro from './userScreens/novoregistro'
 
 function App(){
     const [user,setUser]=useState({})
-
+    console.log(user.token)
     return (
         <UserContext.Provider value={{user,setUser}}>
             <BrowserRouter>
@@ -21,7 +21,7 @@ function App(){
                     <Route path="/" element={<TelaLogin />} />
                     <Route path="/sign-up" element={<TelaCadastro />} />
                     <Route path="/telainicial" element={<TelaInicial />} />
-                    <Route path="/newRegister:type" element={<TelaNovoRegistro />} />
+                    <Route path="/newRegister/:type" element={<TelaNovoRegistro />} />
                 </Routes>
             </BrowserRouter>
         </UserContext.Provider>

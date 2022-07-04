@@ -23,7 +23,8 @@ const navigate=useNavigate()
         }
         const promise=axios.post("http://localhost:5000/login/",loginPost)
         promise.then((element)=>{
-            const {name,userId,token}=element;
+            console.log(element)
+            const {name,userId,token}=element.data;
             setUser({
             name,
             userId,
@@ -36,8 +37,9 @@ const navigate=useNavigate()
             clearInputs()
         })
     }
-
+    
     return (
+        
         <Tela>
             <h1>MyWallet</h1>
             <Form onSubmit={handleSubmit}>
