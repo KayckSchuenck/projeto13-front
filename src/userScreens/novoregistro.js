@@ -39,8 +39,7 @@ export default function TelaNovoRegistro(){
         const promise=axios.post("http://localhost:5000/registers",registerPost,config)
         promise.then(()=>{
             navigate('/telainicial')
-        }
-        )
+        })
         .catch(()=>alert("Houve um erro, tente novamente"))
     }
 

@@ -22,7 +22,6 @@ export default function TelaInicial(){
         })
         promise
         .then(e=> {
-            console.log(e)
             setDados(e.data.entradas)
             setTotal(e.data.total)
         }) 
@@ -42,7 +41,7 @@ export default function TelaInicial(){
             {(dados.length===0 ? (<>Não há registros de entrada ou saída</>) : 
             <>
             {dados.map((elem,index)=>
-                <Entrada date={elem.date} description={elem.description} price={elem.price} type={elem.type} key={index}/>
+                <Entrada date={elem.date} description={elem.description} price={elem.price} type={elem.type} id={elem._id} setDados={setDados} setTotal={setTotal} key={index}/>
             )}
             </>
             )}
