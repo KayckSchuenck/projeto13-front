@@ -21,7 +21,7 @@ const navigate=useNavigate()
             email,
             password
         }
-        const promise=axios.post("http://localhost:5000/login/",loginPost)
+        const promise=axios.post("https://projeto13-back.herokuapp.com/login",loginPost)
         promise.then((element)=>{
             console.log(element)
             const {name,userId,token}=element.data;

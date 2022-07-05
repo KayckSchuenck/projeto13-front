@@ -7,7 +7,7 @@ import { UserContext } from '../contexts/usercontext'
 export default function Entrada(props){
     const {user,setUser}=useContext(UserContext)
     function reloadApi(){
-        const promise=axios.get("http://localhost:5000/registers",{
+        const promise=axios.get("https://projeto13-back.herokuapp.com/registers",{
                 headers: {
                     Authorization:`Bearer ${user.token}`
                 }
@@ -23,7 +23,7 @@ export default function Entrada(props){
     }
     function deleteEntry(){
         if(!window.confirm("Deseja mesmo excluir esse registro?")) return
-        const promise=axios.delete('http://localhost:5000/registers',{
+        const promise=axios.delete('https://projeto13-back.herokuapp.com/registers',{
             headers: {
               Authorization: `Bearer ${user.token}`,
               id:props.id

@@ -36,7 +36,7 @@ export default function TelaNovoRegistro(){
                 Authorization: `Bearer ${user.token}`
             }
         }
-        const promise=axios.post("http://localhost:5000/registers",registerPost,config)
+        const promise=axios.post("https://projeto13-back.herokuapp.com/registers",registerPost,config)
         promise.then(()=>{
             navigate('/telainicial')
         })

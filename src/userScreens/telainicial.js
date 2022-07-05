@@ -15,7 +15,7 @@ export default function TelaInicial(){
     const [dados,setDados]=useState()
     const [total,setTotal]=useState()
     useEffect(()=>{
-        const promise=axios.get("http://localhost:5000/registers",{
+        const promise=axios.get("https://projeto13-back.herokuapp.com/registers",{
                 headers: {
                     Authorization:`Bearer ${user.token}`
                 }

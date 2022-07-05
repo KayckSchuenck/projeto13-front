@@ -27,7 +27,7 @@ export default function TelaCadastro() {
         if(postForm.password!==postForm.confirmPassword){
             alert("Senhas diferentes")
         }
-        const promise=axios.post("http://localhost:5000/sign-up/",postForm)
+        const promise=axios.post("https://projeto13-back.herokuapp.com/sign-up",postForm)
         setPostForm(clearInputs)
         promise.then(()=>{
             alert("Conta criada com sucesso")
